@@ -21,7 +21,7 @@ SYM1DMMMT_adapted_srng:
 
 SYM1DMMMT_adapted_thermalize:
 - this code is useful to determine a good choice of integration parameters (ntau, dtau). It changes ntau while keeping the step size ntau * dtau for Hamiltonian MCMC fixed until an acceptance rate of 80% is reached. It writes the resutls into a file that is passed as the third argument to the program.
-
+- this version of the code does not have contrains in P and Myers implemented, so the input file takes 6 parameters less.
 
 Compiling the code:
 1) in the file matrix_parallel/size_parallel.h change the compile time parameters such as lattice size, N, and parallelization to the desired quantities. For supersymmetric simulations, one needs ndim=9. nsublat and nblock need to be at least 2. 
@@ -42,4 +42,48 @@ Some data analysis scripts there are outdated, current scripts and instructions 
 
 Scripts:
 
+Batch_Production_con_m0.5_T0.2_S36N16_F16.sh
+- Creates input file (regular code) and execution scripts for the folder structure outlined in the document above. See inside script for what options to change. 
 
+Batch_Thermalization.sh
+- Creates input files and execution scripts for the thermalization code. 
+
+G_L36N16T0.2M0.5D9_F11_7.pbs
+- Example pbs script to run the simulation code
+
+auto_submit.sh
+- checks if a job beloning to certain set of runtime paramters (define in submit_list.txt) is still active. If inactive, a new job is generated and submitted that continues at the last checkpoint.
+
+functions_...
+- contains functions used in the Batch... scripts
+
+prod_Run_New_Jobs.sh
+- runs new jobs created with Batch_Production_...
+
+
+
+Files in scripts folder:
+
+G_L36N16T0.2M0.5D9_F11_7.dat
+- Example input file containing runtime paramters for regualar code
+
+th_G_L12N36T0.26M1.0D9_F1_1.dat
+- Example input file for a thermalization run
+
+IP_Files/
+- contains files that define which ntau and dtau are used in the Batch_Production script above. 
+
+memory_requirements.txt
+- contains memory requirements for specific compile time paramters
+
+
+
+QPACE4 specific:
+
+Changes from Athene (pbs) to QPACE4 (slurm) are documented here:
+https://docs.google.com/document/d/1ZR6rRv87PFG1humlIN43VEtbGuYVBppP4xIvL9zgwfM/edit?usp=sharing
+
+Scritps for QPACE4:
+
+qp4_auto_submit_via_ssh.sh
+- runs on Athene and does autosubmit on QP4 due to a lack of screen / cronjob there. 
